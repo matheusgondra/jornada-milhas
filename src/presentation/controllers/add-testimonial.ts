@@ -20,9 +20,9 @@ export class AddTestimonialController implements Controller {
 				return badRequest(error);
 			}
 
-			this.addTestimonial.add(httpRequest.body);
+			const testimonial = await this.addTestimonial.add(httpRequest.body);
 
-			return created("");
+			return created(testimonial);
 		} catch (error) {
 			return {
 				statusCode: 500,
