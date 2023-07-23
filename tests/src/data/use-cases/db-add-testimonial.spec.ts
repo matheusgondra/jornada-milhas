@@ -23,7 +23,9 @@ interface SutTypes {
 
 const makeSut = (): SutTypes => {
 	const addTestimonialRepositoryStub = makeAddTestimonialRepositoryStub();
-	const sut = new DbAddTestimonial(addTestimonialRepositoryStub);
+	const sut = new DbAddTestimonial({
+		addTestimonialRepository: addTestimonialRepositoryStub
+	});
 	return {
 		sut,
 		addTestimonialRepositoryStub

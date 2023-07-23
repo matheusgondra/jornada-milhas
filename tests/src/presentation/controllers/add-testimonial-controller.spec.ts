@@ -54,7 +54,10 @@ interface SutTypes {
 const makeSut = (): SutTypes => {
 	const validationStub = makeValidationStub();
 	const addTestimonialStub = makeAddTestimonialStub();
-	const sut = new AddTestimonialController(validationStub, addTestimonialStub);
+	const sut = new AddTestimonialController({
+		validation: validationStub,
+		addTestimonial: addTestimonialStub
+	});
 	return {
 		sut,
 		validationStub,
