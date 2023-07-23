@@ -1,3 +1,8 @@
+import {
+	AddTestimonial,
+	AddTestimonialModel,
+	TestimonialModel
+} from "../../../../src/domain";
 import { AddTestimonialController } from "../../../../src/presentation/controllers/add-testimonial";
 import { MissingParamError } from "../../../../src/presentation/errors";
 import { badRequest } from "../../../../src/presentation/helpers/http-helpers";
@@ -13,6 +18,20 @@ const makeValidationStub = (): Validation => {
 	return new ValidationStub();
 };
 
+const makeAddTestimonialStub = (): AddTestimonial => {
+	class AddTestimonialStub implements AddTestimonial {
+		async add(testimonial: AddTestimonialModel): Promise<TestimonialModel> {
+			return {
+				id: 1,
+				name: "any_name",
+				photo: "any_photo",
+				testimonial: "any_testimonial"
+			};
+		}
+	}
+	return new AddTestimonialStub();
+};
+
 const makeFakeRequest = (): HttpRequest => {
 	return {
 		body: {
@@ -26,14 +45,17 @@ const makeFakeRequest = (): HttpRequest => {
 interface SutTypes {
 	sut: AddTestimonialController;
 	validationStub: Validation;
+	addTestimonialStub: AddTestimonial;
 }
 
 const makeSut = (): SutTypes => {
 	const validationStub = makeValidationStub();
-	const sut = new AddTestimonialController(validationStub);
+	const addTestimonialStub = makeAddTestimonialStub();
+	const sut = new AddTestimonialController(validationStub, addTestimonialStub);
 	return {
 		sut,
-		validationStub
+		validationStub,
+		addTestimonialStub
 	};
 };
 
@@ -54,5 +76,12 @@ describe("AddTestimonial Controller", () => {
 		expect(httpResponse).toEqual(
 			badRequest(new MissingParamError("any_field"))
 		);
+	});
+
+	it("Should call AddTestimonial with correct values", async () => {
+		const { sut, addTestimonialStub } = makeSut();
+		const addTestimonialSpy = jest.spyOn(addTestimonialStub, "add");
+		await sut.handle(makeFakeRequest());
+		expect(addTestimonialSpy).toBeCalledWith(makeFakeRequest().body);
 	});
 });
