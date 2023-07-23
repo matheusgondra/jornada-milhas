@@ -45,4 +45,13 @@ describe("DbAddTestimonial", () => {
 		await sut.add(makeFakeData());
 		expect(addSpy).toBeCalledWith(makeFakeData());
 	});
+
+	it("Should throw if AddTestimonialRepository throws", async () => {
+		const { sut, addTestimonialRepositoryStub } = makeSut();
+		jest
+			.spyOn(addTestimonialRepositoryStub, "add")
+			.mockRejectedValueOnce(new Error());
+		const promise = sut.add(makeFakeData());
+		await expect(promise).rejects.toThrow();
+	});
 });
