@@ -1,3 +1,4 @@
+import { badRequest, created } from "../helpers/http-helpers";
 import { Validation } from "../helpers/validators/validation";
 import { Controller } from "../protocols/controller";
 import { HttpRequest, HttpResponse } from "../protocols/http";
@@ -10,11 +11,18 @@ export class AddTestimonialController implements Controller {
 	}
 
 	async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-		this.validation.validate(httpRequest.body);
+		try {
+			const error = this.validation.validate(httpRequest.body);
+			if (error) {
+				return badRequest(error);
+			}
 
-		return {
-			statusCode: 201,
-			body: ""
-		};
+			return created("");
+		} catch (error) {
+			return {
+				statusCode: 500,
+				body: error
+			};
+		}
 	}
 }
