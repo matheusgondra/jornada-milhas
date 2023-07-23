@@ -7,5 +7,10 @@ export interface AddTestimonialModel {
 }
 
 export interface AddTestimonial {
-	add(testimonial: AddTestimonialModel): Promise<TestimonialModel>;
+	add(testimonial: AddTestimonial.Params): Promise<AddTestimonial.Result>;
+}
+
+export namespace AddTestimonial {
+	export type Params = AddTestimonialModel;
+	export type Result = TestimonialModel;
 }

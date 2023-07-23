@@ -8,7 +8,10 @@ export class AddTestimonialController implements Controller {
 	private readonly validation: Validation;
 	private readonly addTestimonial: AddTestimonial;
 
-	constructor(validation: Validation, addTestimonial: AddTestimonial) {
+	constructor({
+		validation,
+		addTestimonial
+	}: AddTestimonialController.Dependencies) {
 		this.validation = validation;
 		this.addTestimonial = addTestimonial;
 	}
@@ -29,5 +32,12 @@ export class AddTestimonialController implements Controller {
 				body: error
 			};
 		}
+	}
+}
+
+export namespace AddTestimonialController {
+	export interface Dependencies {
+		validation: Validation;
+		addTestimonial: AddTestimonial;
 	}
 }
