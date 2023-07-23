@@ -5,7 +5,10 @@ import {
 } from "../../../../src/domain";
 import { AddTestimonialController } from "../../../../src/presentation/controllers/add-testimonial";
 import { MissingParamError } from "../../../../src/presentation/errors";
-import { badRequest } from "../../../../src/presentation/helpers/http-helpers";
+import {
+	badRequest,
+	created
+} from "../../../../src/presentation/helpers/http-helpers";
 import { Validation } from "../../../../src/presentation/helpers/validators/validation";
 import { HttpRequest } from "../../../../src/presentation/protocols/http";
 
@@ -83,5 +86,16 @@ describe("AddTestimonial Controller", () => {
 		const addTestimonialSpy = jest.spyOn(addTestimonialStub, "add");
 		await sut.handle(makeFakeRequest());
 		expect(addTestimonialSpy).toBeCalledWith(makeFakeRequest().body);
+	});
+
+	it("Should return 200 if valid data is provided", async () => {
+		const { sut } = makeSut();
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(
+			created({
+				id: 1,
+				...makeFakeRequest().body
+			})
+		);
 	});
 });
