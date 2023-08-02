@@ -10,7 +10,7 @@ export class NameValidation implements Validation {
 
 	validate(input: any): Error | null {
 		if (!/^[A-Za-z]{3,}$/.test(input[this.fieldName])) {
-			return new InvalidParamError(input);
+			return new InvalidParamError(this.fieldName);
 		}
 		return null;
 	}
