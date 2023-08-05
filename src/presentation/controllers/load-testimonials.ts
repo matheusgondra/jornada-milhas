@@ -1,19 +1,19 @@
-import { LoadTestimonial } from "../../domain";
-import { badRequest } from "../helpers/http-helpers";
+import { LoadTestimonials } from "../../domain";
+import { badRequest, success } from "../helpers/http-helpers";
 import { Validation } from "../helpers/validators/validation";
 import { Controller } from "../protocols/controller";
 import { HttpRequest, HttpResponse } from "../protocols/http";
 
-export class LoadTestimonialController implements Controller {
+export class LoadTestimonialsController implements Controller {
 	private readonly validation: Validation;
-	private readonly loadTestimonial: LoadTestimonial;
+	private readonly loadTestimonials: LoadTestimonials;
 
 	constructor({
 		validation,
-		loadTestimonial
-	}: LoadTestimonialController.Dependencies) {
+		loadTestimonials
+	}: LoadTestimonialsController.Dependencies) {
 		this.validation = validation;
-		this.loadTestimonial = loadTestimonial;
+		this.loadTestimonials = loadTestimonials;
 	}
 
 	async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -22,18 +22,15 @@ export class LoadTestimonialController implements Controller {
 			return badRequest(error);
 		}
 
-		await this.loadTestimonial.load();
+		const testimonials = await this.loadTestimonials.load();
 
-		return {
-			statusCode: 200,
-			body: ""
-		};
+		return success(testimonials);
 	}
 }
 
-export namespace LoadTestimonialController {
+export namespace LoadTestimonialsController {
 	export interface Dependencies {
 		validation: Validation;
-		loadTestimonial: LoadTestimonial;
+		loadTestimonials: LoadTestimonials;
 	}
 }
