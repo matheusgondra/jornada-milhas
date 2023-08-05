@@ -1,8 +1,4 @@
-import {
-	AddTestimonial,
-	AddTestimonialModel,
-	TestimonialModel
-} from "../../../../src/domain";
+import { AddTestimonial } from "../../../../src/domain";
 import { AddTestimonialController } from "../../../../src/presentation/controllers/add-testimonial";
 import { MissingParamError } from "../../../../src/presentation/errors";
 import {
@@ -23,7 +19,9 @@ const makeValidationStub = (): Validation => {
 
 const makeAddTestimonialStub = (): AddTestimonial => {
 	class AddTestimonialStub implements AddTestimonial {
-		async add(testimonial: AddTestimonialModel): Promise<TestimonialModel> {
+		async add(
+			testimonial: AddTestimonial.Params
+		): Promise<AddTestimonial.Result> {
 			return {
 				id: 1,
 				name: "any_name",
