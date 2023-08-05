@@ -1,10 +1,12 @@
 import { AddTestimonialRepository } from "../../../../src/data/protocols";
 import { DbAddTestimonial } from "../../../../src/data/use-cases";
-import { AddTestimonialModel, TestimonialModel } from "../../../../src/domain";
+import { AddTestimonialModel } from "../../../../src/domain";
 
 const makeAddTestimonialRepositoryStub = (): AddTestimonialRepository => {
 	class AddTestimonialRepositoryStub implements AddTestimonialRepository {
-		async add(data: AddTestimonialModel): Promise<TestimonialModel> {
+		async add(
+			data: AddTestimonialRepository.Params
+		): Promise<AddTestimonialRepository.Result> {
 			return {
 				id: 1,
 				name: "any_name",
