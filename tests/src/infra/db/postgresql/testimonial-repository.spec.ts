@@ -10,8 +10,12 @@ describe("TestimonialRepository", () => {
 		await PrismaHelper.disconnect();
 	});
 
+	const makeSut = (): TestimonialRepository => {
+		return new TestimonialRepository();
+	};
+
 	it("Should return a testimonial on success", async () => {
-		const sut = new TestimonialRepository();
+		const sut = makeSut();
 		const data = {
 			name: "any_name",
 			photo: "any_photo",
