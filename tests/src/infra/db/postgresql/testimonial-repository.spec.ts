@@ -14,17 +14,34 @@ describe("TestimonialRepository", () => {
 		return new TestimonialRepository();
 	};
 
-	it("Should return a testimonial on success", async () => {
-		const sut = makeSut();
-		const data = {
-			name: "any_name",
-			photo: "any_photo",
-			testimonial: "any_testimonial"
-		};
-		const testimonial = await sut.add(data);
-		expect(testimonial).toEqual({
-			id: expect.any(Number),
-			...data
+	describe("AddTestimonial", () => {
+		it("Should return a testimonial on success", async () => {
+			const sut = makeSut();
+			const data = {
+				name: "any_name",
+				photo: "any_photo",
+				testimonial: "any_testimonial"
+			};
+			const testimonial = await sut.add(data);
+			expect(testimonial).toEqual({
+				id: expect.any(Number),
+				...data
+			});
+		});
+	});
+
+	describe("LoadTestimonials", () => {
+		it("Should return the testimonials on success", async () => {
+			const sut = makeSut();
+			const testimonials = await sut.load();
+			expect(testimonials).toEqual([
+				{
+					id: expect.any(Number),
+					name: "any_name",
+					photo: "any_photo",
+					testimonial: "any_testimonial"
+				}
+			]);
 		});
 	});
 });
