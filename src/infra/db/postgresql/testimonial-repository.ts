@@ -1,7 +1,10 @@
 import { AddTestimonialRepository } from "../../../data/protocols";
+import { LoadTestimonials } from "../../../domain";
 import { db } from "./prisma";
 
-export class TestimonialRepository implements AddTestimonialRepository {
+export class TestimonialRepository
+	implements AddTestimonialRepository, LoadTestimonials
+{
 	async add(
 		data: AddTestimonialRepository.Params
 	): Promise<AddTestimonialRepository.Result> {
@@ -10,5 +13,10 @@ export class TestimonialRepository implements AddTestimonialRepository {
 		});
 
 		return testimonial;
+	}
+
+	async load(): Promise<LoadTestimonials.Result> {
+		const testimonials = await db.testimonial.findMany();
+		return testimonials;
 	}
 }
