@@ -3,11 +3,11 @@ import app from "../../../../src/main/config/app";
 import { PrismaHelper } from "../../../helpers/prisma-helper";
 
 describe("AddTestimonial Routes", () => {
-	beforeAll(async () => {
+	beforeEach(async () => {
 		await PrismaHelper.connect();
 	});
 
-	afterAll(async () => {
+	afterEach(async () => {
 		await PrismaHelper.disconnect();
 	});
 

@@ -2,12 +2,18 @@ import { TestimonialRepository } from "../../../../../src/infra/db/postgresql/te
 import { PrismaHelper } from "../../../../helpers/prisma-helper";
 
 describe("TestimonialRepository", () => {
-	beforeAll(async () => {
+	beforeEach(async () => {
 		await PrismaHelper.connect();
 	});
 
-	afterAll(async () => {
+	afterEach(async () => {
 		await PrismaHelper.disconnect();
+	});
+
+	const makeFakeData = () => ({
+		name: "any_name",
+		photo: "any_photo",
+		testimonial: "any_testimonial"
 	});
 
 	const makeSut = (): TestimonialRepository => {
@@ -17,15 +23,10 @@ describe("TestimonialRepository", () => {
 	describe("AddTestimonial", () => {
 		it("Should return a testimonial on success", async () => {
 			const sut = makeSut();
-			const data = {
-				name: "any_name",
-				photo: "any_photo",
-				testimonial: "any_testimonial"
-			};
-			const testimonial = await sut.add(data);
+			const testimonial = await sut.add(makeFakeData());
 			expect(testimonial).toEqual({
-				id: expect.any(Number),
-				...data
+				id: 1,
+				...makeFakeData()
 			});
 		});
 	});
@@ -33,13 +34,12 @@ describe("TestimonialRepository", () => {
 	describe("LoadTestimonials", () => {
 		it("Should return the testimonials on success", async () => {
 			const sut = makeSut();
+			await sut.add(makeFakeData());
 			const testimonials = await sut.load();
 			expect(testimonials).toEqual([
 				{
-					id: expect.any(Number),
-					name: "any_name",
-					photo: "any_photo",
-					testimonial: "any_testimonial"
+					id: 1,
+					...makeFakeData()
 				}
 			]);
 		});
