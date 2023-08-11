@@ -1,6 +1,9 @@
 import { LoadTestimonials } from "../../../../src/domain";
 import { LoadTestimonialsController } from "../../../../src/presentation/controllers/load-testimonials";
-import { success } from "../../../../src/presentation/helpers/http-helpers";
+import {
+	serverError,
+	success
+} from "../../../../src/presentation/helpers/http-helpers";
 import { HttpRequest } from "../../../../src/presentation/protocols/http";
 
 const makeLoadTestimonialsStub = (): LoadTestimonials => {
@@ -46,6 +49,15 @@ describe("LoadTestimonialsController", () => {
 		const loadSpy = jest.spyOn(loadTestimonialsStub, "load");
 		await sut.handle(makeFakeRequest());
 		expect(loadSpy).toBeCalledTimes(1);
+	});
+
+	it("Should return 500 if LoadTestimonials throws", async () => {
+		const { sut, loadTestimonialsStub } = makeSut();
+		jest
+			.spyOn(loadTestimonialsStub, "load")
+			.mockRejectedValueOnce(new Error());
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(serverError(new Error()));
 	});
 
 	it("Should return the testimonials on success", async () => {
