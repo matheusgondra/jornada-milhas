@@ -21,9 +21,10 @@ export class LoadTestimonialController implements Controller {
 				return badRequest(error);
 			}
 
-			await this.loadTestimonial.load(httpRequest.params);
-
-			return success("");
+			const testimonial = await this.loadTestimonial.load(
+				httpRequest.params
+			);
+			return success(testimonial);
 		} catch (error) {
 			return serverError(error as Error);
 		}
