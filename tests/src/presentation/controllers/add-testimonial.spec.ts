@@ -1,11 +1,12 @@
 import { AddTestimonial } from "../../../../src/domain";
-import { AddTestimonialController } from "../../../../src/presentation/controllers/add-testimonial";
+import { AddTestimonialController } from "../../../../src/presentation/controllers";
 import { MissingParamError } from "../../../../src/presentation/errors";
 import {
 	badRequest,
-	created
-} from "../../../../src/presentation/helpers/http-helpers";
-import { Validation } from "../../../../src/presentation/helpers/validators/validation";
+	created,
+	serverError,
+	Validation
+} from "../../../../src/presentation/helpers";
 import { HttpRequest } from "../../../../src/presentation/protocols/http";
 
 const makeValidationStub = (): Validation => {
@@ -87,6 +88,13 @@ describe("AddTestimonial Controller", () => {
 		const addTestimonialSpy = jest.spyOn(addTestimonialStub, "add");
 		await sut.handle(makeFakeRequest());
 		expect(addTestimonialSpy).toBeCalledWith(makeFakeRequest().body);
+	});
+
+	it("Should return 500 if AddTestimonial throws", async () => {
+		const { sut, addTestimonialStub } = makeSut();
+		jest.spyOn(addTestimonialStub, "add").mockRejectedValueOnce(new Error());
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(serverError(new Error()));
 	});
 
 	it("Should return 200 if valid data is provided", async () => {
