@@ -1,13 +1,17 @@
-import { badRequest, success } from "../helpers/http-helpers";
-import { Validation } from "../helpers/validators/validation";
-import { Controller } from "../protocols/controller";
-import { HttpRequest, HttpResponse } from "../protocols/http";
+import { LoadTestimonial } from "../../domain";
+import { badRequest, success, Validation } from "../helpers";
+import { Controller, HttpRequest, HttpResponse } from "../protocols";
 
 export class LoadTestimonialController implements Controller {
 	private readonly validation: Validation;
+	private readonly loadTestimonial: LoadTestimonial;
 
-	constructor({ validation }: LoadTestimonialController.Dependencies) {
+	constructor({
+		validation,
+		loadTestimonial
+	}: LoadTestimonialController.Dependencies) {
 		this.validation = validation;
+		this.loadTestimonial = loadTestimonial;
 	}
 
 	async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -16,6 +20,8 @@ export class LoadTestimonialController implements Controller {
 			return badRequest(error);
 		}
 
+		await this.loadTestimonial.load(httpRequest.params);
+
 		return success("");
 	}
 }
@@ -23,5 +29,6 @@ export class LoadTestimonialController implements Controller {
 export namespace LoadTestimonialController {
 	export interface Dependencies {
 		validation: Validation;
+		loadTestimonial: LoadTestimonial;
 	}
 }
