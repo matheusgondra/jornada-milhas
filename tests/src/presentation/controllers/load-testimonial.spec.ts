@@ -1,4 +1,5 @@
 import { LoadTestimonialController } from "../../../../src/presentation/controllers/load-testimonial";
+import { badRequest } from "../../../../src/presentation/helpers/http-helpers";
 import { Validation } from "../../../../src/presentation/helpers/validators/validation";
 
 const makeValidationStub = (): Validation => {
@@ -37,5 +38,17 @@ describe("LoadTestimonial Controller", () => {
 		};
 		await sut.handle(httpRequest);
 		expect(validateSpy).toBeCalledWith(httpRequest.params);
+	});
+
+	it("Should 400 if Validation returns an error", async () => {
+		const { sut, validationStub } = makeSut();
+		jest.spyOn(validationStub, "validate").mockReturnValueOnce(new Error());
+		const httpRequest = {
+			params: {
+				testimonialId: 1
+			}
+		};
+		const httpResponse = await sut.handle(httpRequest);
+		expect(httpResponse).toEqual(badRequest(new Error()));
 	});
 });
