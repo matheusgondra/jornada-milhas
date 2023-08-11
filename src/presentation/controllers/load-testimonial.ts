@@ -1,5 +1,5 @@
 import { LoadTestimonial } from "../../domain";
-import { badRequest, success, Validation } from "../helpers";
+import { badRequest, serverError, success, Validation } from "../helpers";
 import { Controller, HttpRequest, HttpResponse } from "../protocols";
 
 export class LoadTestimonialController implements Controller {
@@ -15,14 +15,18 @@ export class LoadTestimonialController implements Controller {
 	}
 
 	async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-		const error = this.validation.validate(httpRequest.params);
-		if (error) {
-			return badRequest(error);
+		try {
+			const error = this.validation.validate(httpRequest.params);
+			if (error) {
+				return badRequest(error);
+			}
+
+			await this.loadTestimonial.load(httpRequest.params);
+
+			return success("");
+		} catch (error) {
+			return serverError(error as Error);
 		}
-
-		await this.loadTestimonial.load(httpRequest.params);
-
-		return success("");
 	}
 }
 
