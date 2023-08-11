@@ -3,6 +3,7 @@ import { LoadTestimonialController } from "../../../../src/presentation/controll
 import {
 	badRequest,
 	serverError,
+	success,
 	Validation
 } from "../../../../src/presentation/helpers";
 import { HttpRequest } from "../../../../src/presentation/protocols";
@@ -87,5 +88,18 @@ describe("LoadTestimonial Controller", () => {
 			.mockRejectedValueOnce(new Error());
 		const httpResponse = await sut.handle(makeFakeRequest());
 		expect(httpResponse).toEqual(serverError(new Error()));
+	});
+
+	it("Should return a testimonial on success", async () => {
+		const { sut } = makeSut();
+		const testimonial = await sut.handle(makeFakeRequest());
+		expect(testimonial).toEqual(
+			success({
+				id: 1,
+				name: "any_name",
+				photo: "any_photo",
+				testimonial: "any_testimonial"
+			})
+		);
 	});
 });
