@@ -1,5 +1,5 @@
 import { LoadTestimonials } from "../../domain";
-import { LoadTestimonialsRepository } from "../protocols/load-testimonials-repository";
+import { LoadTestimonialsRepository } from "../protocols";
 
 export class DbLoadTestimonials implements LoadTestimonials {
 	private readonly loadTestimonialsRepository: LoadTestimonialsRepository;

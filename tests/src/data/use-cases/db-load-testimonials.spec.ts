@@ -1,5 +1,5 @@
-import { LoadTestimonialsRepository } from "../../../../src/data/protocols/load-testimonials-repository";
-import { DbLoadTestimonials } from "../../../../src/data/use-cases/db-load-testimonials";
+import { LoadTestimonialsRepository } from "../../../../src/data/protocols";
+import { DbLoadTestimonials } from "../../../../src/data/use-cases";
 
 const makeLoadTestimonialsRepositoryStub = (): LoadTestimonialsRepository => {
 	class LoadTestimonialsRepositoryStub implements LoadTestimonialsRepository {
