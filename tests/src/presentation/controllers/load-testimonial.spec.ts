@@ -1,6 +1,10 @@
 import { LoadTestimonial } from "../../../../src/domain";
 import { LoadTestimonialController } from "../../../../src/presentation/controllers";
-import { badRequest, Validation } from "../../../../src/presentation/helpers";
+import {
+	badRequest,
+	serverError,
+	Validation
+} from "../../../../src/presentation/helpers";
 import { HttpRequest } from "../../../../src/presentation/protocols";
 
 const makeValidationStub = (): Validation => {
@@ -74,5 +78,14 @@ describe("LoadTestimonial Controller", () => {
 		const loadSpy = jest.spyOn(loadTestimonialStub, "load");
 		await sut.handle(makeFakeRequest());
 		expect(loadSpy).toBeCalledWith(makeFakeRequest().params);
+	});
+
+	it("Should returns 500 if LoadTestimonial throws", async () => {
+		const { sut, loadTestimonialStub } = makeSut();
+		jest
+			.spyOn(loadTestimonialStub, "load")
+			.mockRejectedValueOnce(new Error());
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(serverError(new Error()));
 	});
 });
