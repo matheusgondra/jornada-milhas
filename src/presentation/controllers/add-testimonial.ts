@@ -1,8 +1,6 @@
 import { AddTestimonial } from "../../domain";
-import { badRequest, created } from "../helpers/http-helpers";
-import { Validation } from "../helpers/validators/validation";
-import { Controller } from "../protocols/controller";
-import { HttpRequest, HttpResponse } from "../protocols/http";
+import { badRequest, created, serverError, Validation } from "../helpers";
+import { Controller, HttpRequest, HttpResponse } from "../protocols";
 
 export class AddTestimonialController implements Controller {
 	private readonly validation: Validation;
@@ -27,10 +25,7 @@ export class AddTestimonialController implements Controller {
 
 			return created(testimonial);
 		} catch (error) {
-			return {
-				statusCode: 500,
-				body: error
-			};
+			return serverError(error as Error);
 		}
 	}
 }
