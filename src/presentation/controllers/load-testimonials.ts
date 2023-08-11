@@ -1,8 +1,6 @@
 import { LoadTestimonials } from "../../domain";
-import { badRequest, success } from "../helpers/http-helpers";
-import { Validation } from "../helpers/validators/validation";
-import { Controller } from "../protocols/controller";
-import { HttpRequest, HttpResponse } from "../protocols/http";
+import { serverError, success } from "../helpers";
+import { HttpRequest, HttpResponse, Controller } from "../protocols";
 
 export class LoadTestimonialsController implements Controller {
 	private readonly loadTestimonials: LoadTestimonials;
@@ -12,9 +10,12 @@ export class LoadTestimonialsController implements Controller {
 	}
 
 	async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-		const testimonials = await this.loadTestimonials.load();
-
-		return success(testimonials);
+		try {
+			const testimonials = await this.loadTestimonials.load();
+			return success(testimonials);
+		} catch (error) {
+			return serverError(error as Error);
+		}
 	}
 }
 
