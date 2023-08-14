@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+	"node": "18.16.1"
+  },
   "scripts": {
+	 "start": "node dist/src/main/server.js",
     "dev": "sucrase-node src/main/server.ts",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
@@ -14,7 +18,8 @@
     "prepare": "husky install",
     "lint": "eslint ./",
     "lint:fix": "yarn lint --fix",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+	 "deploy": "prisma migrate deploy && tsc --build"
   },
   "keywords": [],
   "author": "",
