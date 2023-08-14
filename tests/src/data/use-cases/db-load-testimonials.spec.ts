@@ -41,6 +41,15 @@ describe("DbLoadTestimonials", () => {
 		expect(loadSpy).toBeCalledTimes(1);
 	});
 
+	it("Should return empty list if LoadTestimonialsRepository return empty list", async () => {
+		const { sut, loadTestimonialsRepositoryStub } = makeSut();
+		jest
+			.spyOn(loadTestimonialsRepositoryStub, "load")
+			.mockResolvedValueOnce([]);
+		const testimonials = await sut.load();
+		expect(testimonials).toEqual([]);
+	});
+
 	it("Should throw if LoadTestimonialsRepository throws", async () => {
 		const { sut, loadTestimonialsRepositoryStub } = makeSut();
 		jest
