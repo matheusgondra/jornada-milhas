@@ -5,5 +5,5 @@ export interface LoadTestimonials {
 }
 
 export namespace LoadTestimonials {
-	export type Result = TestimonialModel[];
+	export type Result = TestimonialModel[] | [];
 }

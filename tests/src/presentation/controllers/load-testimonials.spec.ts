@@ -51,6 +51,13 @@ describe("LoadTestimonialsController", () => {
 		expect(loadSpy).toBeCalledTimes(1);
 	});
 
+	it("Should return empty list if LoadTestimonials returns empty", async () => {
+		const { sut, loadTestimonialsStub } = makeSut();
+		jest.spyOn(loadTestimonialsStub, "load").mockResolvedValueOnce([]);
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(success([]));
+	});
+
 	it("Should return 500 if LoadTestimonials throws", async () => {
 		const { sut, loadTestimonialsStub } = makeSut();
 		jest
