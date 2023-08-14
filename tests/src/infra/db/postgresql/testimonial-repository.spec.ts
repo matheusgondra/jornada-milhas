@@ -55,5 +55,12 @@ describe("TestimonialRepository", () => {
 				...makeFakeData()
 			});
 		});
+
+		it("Should return null if testimonial not exists", async () => {
+			const sut = makeSut();
+			await sut.add(makeFakeData());
+			const testimonial = await sut.loadById(2);
+			expect(testimonial).toBeNull();
+		});
 	});
 });
