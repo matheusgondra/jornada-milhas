@@ -40,4 +40,13 @@ describe("DbLoadTestimonial", () => {
 		await sut.load(1);
 		expect(loadSpy).toBeCalledWith(1);
 	});
+
+	it("Should throw if LoadTestimonialRepository throws", async () => {
+		const { sut, loadTestimonialRepositoryStub } = makeSut();
+		jest
+			.spyOn(loadTestimonialRepositoryStub, "load")
+			.mockRejectedValueOnce(new Error());
+		const promise = sut.load(1);
+		await expect(promise).rejects.toThrow();
+	});
 });
