@@ -11,7 +11,7 @@ export class DbLoadTestimonial implements LoadTestimonial {
 	async load(
 		testimonialId: LoadTestimonial.Params
 	): Promise<LoadTestimonial.Result> {
-		const testimonial = await this.loadTestimonialRepository.load(
+		const testimonial = await this.loadTestimonialRepository.loadById(
 			testimonialId
 		);
 		return testimonial;

@@ -1,11 +1,11 @@
+import { LoadTestimonialRepository } from "../../../../src/data/protocols";
 import { DbLoadTestimonial } from "../../../../src/data/use-cases";
-import { LoadTestimonial } from "../../../../src/domain";
 
-const makeLoadTestimonialRepositoryStub = (): LoadTestimonial => {
-	class LoadTestimonialRepositoryStub implements LoadTestimonial {
-		async load(
-			testimonialId: LoadTestimonial.Params
-		): Promise<LoadTestimonial.Result> {
+const makeLoadTestimonialRepositoryStub = (): LoadTestimonialRepository => {
+	class LoadTestimonialRepositoryStub implements LoadTestimonialRepository {
+		async loadById(
+			testimonialId: LoadTestimonialRepository.Params
+		): Promise<LoadTestimonialRepository.Result> {
 			return {
 				id: 1,
 				name: "any_name",
@@ -19,7 +19,7 @@ const makeLoadTestimonialRepositoryStub = (): LoadTestimonial => {
 
 interface SutTypes {
 	sut: DbLoadTestimonial;
-	loadTestimonialRepositoryStub: LoadTestimonial;
+	loadTestimonialRepositoryStub: LoadTestimonialRepository;
 }
 
 const makeSut = (): SutTypes => {
@@ -36,7 +36,7 @@ const makeSut = (): SutTypes => {
 describe("DbLoadTestimonial", () => {
 	it("Should call LoadTestimonialRepository", async () => {
 		const { sut, loadTestimonialRepositoryStub } = makeSut();
-		const loadSpy = jest.spyOn(loadTestimonialRepositoryStub, "load");
+		const loadSpy = jest.spyOn(loadTestimonialRepositoryStub, "loadById");
 		await sut.load(1);
 		expect(loadSpy).toBeCalledWith(1);
 	});
@@ -44,7 +44,7 @@ describe("DbLoadTestimonial", () => {
 	it("Should throw if LoadTestimonialRepository throws", async () => {
 		const { sut, loadTestimonialRepositoryStub } = makeSut();
 		jest
-			.spyOn(loadTestimonialRepositoryStub, "load")
+			.spyOn(loadTestimonialRepositoryStub, "loadById")
 			.mockRejectedValueOnce(new Error());
 		const promise = sut.load(1);
 		await expect(promise).rejects.toThrow();

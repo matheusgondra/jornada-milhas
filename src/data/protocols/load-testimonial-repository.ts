@@ -1,7 +1,7 @@
 import { TestimonialModel } from "../../domain";
 
 export interface LoadTestimonialRepository {
-	load(
+	loadById(
 		testimonialId: LoadTestimonialRepository.Params
 	): Promise<LoadTestimonialRepository.Result>;
 }
