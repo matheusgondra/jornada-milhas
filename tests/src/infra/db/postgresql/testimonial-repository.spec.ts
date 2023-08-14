@@ -44,4 +44,16 @@ describe("TestimonialRepository", () => {
 			]);
 		});
 	});
+
+	describe("LoadTestimonial", () => {
+		it("Should return a testimonial on success", async () => {
+			const sut = makeSut();
+			await sut.add(makeFakeData());
+			const testimonial = await sut.loadById(1);
+			expect(testimonial).toEqual({
+				id: 1,
+				...makeFakeData()
+			});
+		});
+	});
 });
