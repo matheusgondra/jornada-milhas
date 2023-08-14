@@ -43,6 +43,12 @@ describe("TestimonialRepository", () => {
 				}
 			]);
 		});
+
+		it("Should return empty array if testimonials not exists", async () => {
+			const sut = makeSut();
+			const testimonials = await sut.load();
+			expect(testimonials).toEqual([]);
+		});
 	});
 
 	describe("LoadTestimonial", () => {
