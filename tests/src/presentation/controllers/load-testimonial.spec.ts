@@ -1,5 +1,6 @@
 import { LoadTestimonial } from "../../../../src/domain";
 import { LoadTestimonialController } from "../../../../src/presentation/controllers";
+import { NotFoundError } from "../../../../src/presentation/errors/not-found-error";
 import {
 	badRequest,
 	serverError,
@@ -88,6 +89,15 @@ describe("LoadTestimonial Controller", () => {
 			.mockRejectedValueOnce(new Error());
 		const httpResponse = await sut.handle(makeFakeRequest());
 		expect(httpResponse).toEqual(serverError(new Error()));
+	});
+
+	it("Should return not found if LoadTestimonial returns null", async () => {
+		const { sut, loadTestimonialStub } = makeSut();
+		jest.spyOn(loadTestimonialStub, "load").mockResolvedValueOnce(null);
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(
+			badRequest(new NotFoundError("testimonial"))
+		);
 	});
 
 	it("Should return a testimonial on success", async () => {
