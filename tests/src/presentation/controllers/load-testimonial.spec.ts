@@ -60,12 +60,16 @@ const makeFakeRequest = (): HttpRequest => ({
 	}
 });
 
+const {
+	params: { testimonialId }
+} = makeFakeRequest();
+
 describe("LoadTestimonial Controller", () => {
 	it("Should call Validation with correct values", async () => {
 		const { sut, validationStub } = makeSut();
 		const validateSpy = jest.spyOn(validationStub, "validate");
 		await sut.handle(makeFakeRequest());
-		expect(validateSpy).toBeCalledWith(makeFakeRequest().params);
+		expect(validateSpy).toBeCalledWith(testimonialId);
 	});
 
 	it("Should 400 if Validation returns an error", async () => {
@@ -79,7 +83,7 @@ describe("LoadTestimonial Controller", () => {
 		const { sut, loadTestimonialStub } = makeSut();
 		const loadSpy = jest.spyOn(loadTestimonialStub, "load");
 		await sut.handle(makeFakeRequest());
-		expect(loadSpy).toBeCalledWith(makeFakeRequest().params);
+		expect(loadSpy).toBeCalledWith(testimonialId);
 	});
 
 	it("Should returns 500 if LoadTestimonial throws", async () => {

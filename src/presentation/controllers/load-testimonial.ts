@@ -17,20 +17,20 @@ export class LoadTestimonialController implements Controller {
 
 	async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
 		try {
-			const error = this.validation.validate(httpRequest.params);
+			const testimonialId = Number(httpRequest.params.testimonialId);
+			const error = this.validation.validate(testimonialId);
 			if (error) {
 				return badRequest(error);
 			}
 
-			const testimonial = await this.loadTestimonial.load(
-				httpRequest.params
-			);
+			const testimonial = await this.loadTestimonial.load(testimonialId);
 			if (!testimonial) {
 				return badRequest(new NotFoundError("testimonial"));
 			}
 
 			return success(testimonial);
 		} catch (error) {
+			console.error(error);
 			return serverError(error as Error);
 		}
 	}
