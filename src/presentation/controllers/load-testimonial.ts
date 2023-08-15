@@ -1,5 +1,5 @@
 import { LoadTestimonial } from "../../domain";
-import { NotFoundError } from "../errors/not-found-error";
+import { NotFoundError } from "../errors";
 import { badRequest, serverError, success, Validation } from "../helpers";
 import { Controller, HttpRequest, HttpResponse } from "../protocols";
 

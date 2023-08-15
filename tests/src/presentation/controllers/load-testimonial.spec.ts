@@ -1,6 +1,6 @@
 import { LoadTestimonial } from "../../../../src/domain";
 import { LoadTestimonialController } from "../../../../src/presentation/controllers";
-import { NotFoundError } from "../../../../src/presentation/errors/not-found-error";
+import { NotFoundError } from "../../../../src/presentation/errors";
 import {
 	badRequest,
 	serverError,

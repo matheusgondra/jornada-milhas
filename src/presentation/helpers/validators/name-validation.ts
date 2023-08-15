@@ -1,4 +1,4 @@
-import { InvalidParamError } from "../../errors/invalid-param-error";
+import { InvalidParamError } from "../../errors";
 import { Validation } from "./validation";
 
 export class NameValidation implements Validation {
