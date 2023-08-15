@@ -6,5 +6,5 @@ export interface LoadTestimonial {
 
 export namespace LoadTestimonial {
 	export type Params = number;
-	export type Result = TestimonialModel;
+	export type Result = TestimonialModel | null;
 }

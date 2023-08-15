@@ -1,4 +1,5 @@
 import { LoadTestimonial } from "../../domain";
+import { NotFoundError } from "../errors/not-found-error";
 import { badRequest, serverError, success, Validation } from "../helpers";
 import { Controller, HttpRequest, HttpResponse } from "../protocols";
 
@@ -24,6 +25,10 @@ export class LoadTestimonialController implements Controller {
 			const testimonial = await this.loadTestimonial.load(
 				httpRequest.params
 			);
+			if (!testimonial) {
+				return badRequest(new NotFoundError("testimonial"));
+			}
+
 			return success(testimonial);
 		} catch (error) {
 			return serverError(error as Error);
