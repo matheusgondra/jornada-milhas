@@ -60,4 +60,15 @@ describe("DbUpdateTestimonial", () => {
 		const promise = sut.update(makeFakeData());
 		await expect(promise).rejects.toThrow();
 	});
+
+	it("Should return a testimonial updated on success", async () => {
+		const { sut } = makeSut();
+		const testimonial = await sut.update(makeFakeData());
+		expect(testimonial).toEqual({
+			id: 1,
+			name: "any_name",
+			photo: "any_photo",
+			testimonial: "any_testimonial"
+		});
+	});
 });
