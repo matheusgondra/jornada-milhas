@@ -1,5 +1,5 @@
 import { UpdateTestimonial } from "../../domain";
-import { Validation, badRequest, success } from "../helpers";
+import { Validation, badRequest, serverError, success } from "../helpers";
 import { Controller, HttpRequest, HttpResponse } from "../protocols";
 
 export class UpdateTestimonialController implements Controller {
@@ -15,19 +15,23 @@ export class UpdateTestimonialController implements Controller {
 	}
 
 	async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-		const error = this.validation.validate(httpRequest);
-		if (error) {
-			return badRequest(error);
+		try {
+			const error = this.validation.validate(httpRequest);
+			if (error) {
+				return badRequest(error);
+			}
+
+			const testimonialId = Number(httpRequest.params.testimonialId);
+			const { testimonial, photo } = httpRequest.body;
+			await this.updateTestimonial.update({
+				testimonialId,
+				data: { testimonial, photo }
+			});
+
+			return success("");
+		} catch (error) {
+			return serverError(error as Error);
 		}
-
-		const testimonialId = Number(httpRequest.params.testimonialId);
-		const { testimonial, photo } = httpRequest.body;
-		await this.updateTestimonial.update({
-			testimonialId,
-			data: { testimonial, photo }
-		});
-
-		return success("");
 	}
 }
 
