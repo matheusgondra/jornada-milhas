@@ -1,6 +1,10 @@
 import { UpdateTestimonial } from "../../../../src/domain";
 import { UpdateTestimonialController } from "../../../../src/presentation/controllers";
-import { Validation, badRequest } from "../../../../src/presentation/helpers";
+import {
+	Validation,
+	badRequest,
+	serverError
+} from "../../../../src/presentation/helpers";
 
 const makeValidationStub = (): Validation => {
 	class ValidationStub implements Validation {
@@ -80,5 +84,14 @@ describe("UpdateTestimonial", () => {
 			testimonialId: 1,
 			data: makeFakeRequest().body
 		});
+	});
+
+	it("Should return 500 if UpdateTestimonial throws", async () => {
+		const { sut, updateTestimonialStub } = makeSut();
+		jest
+			.spyOn(updateTestimonialStub, "update")
+			.mockRejectedValueOnce(new Error());
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(serverError(new Error()));
 	});
 });
