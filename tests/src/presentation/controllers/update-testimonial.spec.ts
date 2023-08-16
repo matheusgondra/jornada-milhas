@@ -1,3 +1,4 @@
+import { UpdateTestimonial } from "../../../../src/domain";
 import { UpdateTestimonialController } from "../../../../src/presentation/controllers";
 import { Validation, badRequest } from "../../../../src/presentation/helpers";
 
@@ -10,19 +11,39 @@ const makeValidationStub = (): Validation => {
 	return new ValidationStub();
 };
 
+const makeUpdateTestimonialStub = (): UpdateTestimonial => {
+	class UpdateTestimonialStub implements UpdateTestimonial {
+		async update(
+			data: UpdateTestimonial.Params
+		): Promise<UpdateTestimonial.Result> {
+			return {
+				id: 1,
+				name: "any_name",
+				testimonial: "any_testimonial",
+				photo: "any_photo"
+			};
+		}
+	}
+	return new UpdateTestimonialStub();
+};
+
 interface SutTypes {
 	sut: UpdateTestimonialController;
 	validationStub: Validation;
+	updateTestimonialStub: UpdateTestimonial;
 }
 
 const makeSut = (): SutTypes => {
 	const validationStub = makeValidationStub();
+	const updateTestimonialStub = makeUpdateTestimonialStub();
 	const sut = new UpdateTestimonialController({
-		validation: validationStub
+		validation: validationStub,
+		updateTestimonial: updateTestimonialStub
 	});
 	return {
 		sut,
-		validationStub
+		validationStub,
+		updateTestimonialStub
 	};
 };
 
@@ -49,5 +70,15 @@ describe("UpdateTestimonial", () => {
 		jest.spyOn(validationStub, "validate").mockReturnValueOnce(new Error());
 		const httpResponse = await sut.handle(makeFakeRequest());
 		expect(httpResponse).toEqual(badRequest(new Error()));
+	});
+
+	it("Should call UpdateTestimonial with correct values", async () => {
+		const { sut, updateTestimonialStub } = makeSut();
+		const updateSpy = jest.spyOn(updateTestimonialStub, "update");
+		await sut.handle(makeFakeRequest());
+		expect(updateSpy).toBeCalledWith({
+			testimonialId: 1,
+			data: makeFakeRequest().body
+		});
 	});
 });
