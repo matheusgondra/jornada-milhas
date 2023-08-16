@@ -26,36 +26,28 @@ const makeSut = (): SutTypes => {
 	};
 };
 
+const makeFakeRequest = () => ({
+	body: {
+		testimonial: "any_testimonial",
+		photo: "any_photo"
+	},
+	params: {
+		testimonialId: 1
+	}
+});
+
 describe("UpdateTestimonial", () => {
 	it("Should call Validation with correct values", async () => {
 		const { sut, validationStub } = makeSut();
 		const validateSpy = jest.spyOn(validationStub, "validate");
-		const httpRequest = {
-			body: {
-				testimonial: "any_testimonial",
-				photo: "any_photo"
-			},
-			params: {
-				testimonialId: 1
-			}
-		};
-		await sut.handle(httpRequest);
-		expect(validateSpy).toBeCalledWith(httpRequest);
+		await sut.handle(makeFakeRequest());
+		expect(validateSpy).toBeCalledWith(makeFakeRequest());
 	});
 
 	it("Should return 400 if Validation returns an error", async () => {
 		const { sut, validationStub } = makeSut();
 		jest.spyOn(validationStub, "validate").mockReturnValueOnce(new Error());
-		const httpRequest = {
-			body: {
-				testimonial: "any_testimonial",
-				photo: "any_photo"
-			},
-			params: {
-				testimonialId: 1
-			}
-		};
-		const httpResponse = await sut.handle(httpRequest);
+		const httpResponse = await sut.handle(makeFakeRequest());
 		expect(httpResponse).toEqual(badRequest(new Error()));
 	});
 });
