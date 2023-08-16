@@ -3,7 +3,8 @@ import { UpdateTestimonialController } from "../../../../src/presentation/contro
 import {
 	Validation,
 	badRequest,
-	serverError
+	serverError,
+	success
 } from "../../../../src/presentation/helpers";
 
 const makeValidationStub = (): Validation => {
@@ -93,5 +94,18 @@ describe("UpdateTestimonial", () => {
 			.mockRejectedValueOnce(new Error());
 		const httpResponse = await sut.handle(makeFakeRequest());
 		expect(httpResponse).toEqual(serverError(new Error()));
+	});
+
+	it("Shoul return a testimonial updated on success", async () => {
+		const { sut } = makeSut();
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(
+			success({
+				id: 1,
+				name: "any_name",
+				testimonial: "any_testimonial",
+				photo: "any_photo"
+			})
+		);
 	});
 });
