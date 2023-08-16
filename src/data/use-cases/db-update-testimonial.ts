@@ -13,7 +13,10 @@ export class DbUpdateTestimonial implements UpdateTestimonial {
 	async update(
 		data: UpdateTestimonial.Params
 	): Promise<UpdateTestimonial.Result> {
-		return await this.updateTestimonialRepository.update(data);
+		const testimonialUpdated = await this.updateTestimonialRepository.update(
+			data
+		);
+		return testimonialUpdated;
 	}
 }
 
