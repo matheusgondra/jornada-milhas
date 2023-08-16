@@ -1,5 +1,5 @@
 import { UpdateTestimonialController } from "../../../../src/presentation/controllers";
-import { Validation } from "../../../../src/presentation/helpers";
+import { Validation, badRequest } from "../../../../src/presentation/helpers";
 
 const makeValidationStub = (): Validation => {
 	class ValidationStub implements Validation {
@@ -41,5 +41,21 @@ describe("UpdateTestimonial", () => {
 		};
 		await sut.handle(httpRequest);
 		expect(validateSpy).toBeCalledWith(httpRequest);
+	});
+
+	it("Should return 400 if Validation returns an error", async () => {
+		const { sut, validationStub } = makeSut();
+		jest.spyOn(validationStub, "validate").mockReturnValueOnce(new Error());
+		const httpRequest = {
+			body: {
+				testimonial: "any_testimonial",
+				photo: "any_photo"
+			},
+			params: {
+				testimonialId: 1
+			}
+		};
+		const httpResponse = await sut.handle(httpRequest);
+		expect(httpResponse).toEqual(badRequest(new Error()));
 	});
 });
