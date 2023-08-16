@@ -23,12 +23,12 @@ export class UpdateTestimonialController implements Controller {
 
 			const testimonialId = Number(httpRequest.params.testimonialId);
 			const { testimonial, photo } = httpRequest.body;
-			await this.updateTestimonial.update({
+			const testimonialUpdated = await this.updateTestimonial.update({
 				testimonialId,
 				data: { testimonial, photo }
 			});
 
-			return success("");
+			return success(testimonialUpdated);
 		} catch (error) {
 			return serverError(error as Error);
 		}
