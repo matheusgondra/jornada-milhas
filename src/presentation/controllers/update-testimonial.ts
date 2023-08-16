@@ -1,4 +1,4 @@
-import { Validation, success } from "../helpers";
+import { Validation, badRequest, success } from "../helpers";
 import { Controller, HttpRequest, HttpResponse } from "../protocols";
 
 export class UpdateTestimonialController implements Controller {
@@ -9,7 +9,10 @@ export class UpdateTestimonialController implements Controller {
 	}
 
 	async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-		this.validation.validate(httpRequest);
+		const error = this.validation.validate(httpRequest);
+		if (error) {
+			return badRequest(error);
+		}
 
 		return success("");
 	}
