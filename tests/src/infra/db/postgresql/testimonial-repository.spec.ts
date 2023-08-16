@@ -1,4 +1,4 @@
-import { TestimonialRepository } from "../../../../../src/infra/db/postgresql/testimonial-repository";
+import { TestimonialRepository } from "../../../../../src/infra/db";
 import { PrismaHelper } from "../../../../helpers/prisma-helper";
 
 describe("TestimonialRepository", () => {

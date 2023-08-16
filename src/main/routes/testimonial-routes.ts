@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { adaptRoute } from "../adapters/express-router-adapter";
+import { adaptRoute } from "../adapters";
 import {
 	makeAddTestimonial,
 	makeLoadTestimonial,

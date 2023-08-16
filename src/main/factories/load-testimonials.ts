@@ -1,6 +1,6 @@
-import { DbLoadTestimonials } from "../../data/use-cases/db-load-testimonials";
-import { TestimonialRepository } from "../../infra/db/postgresql/testimonial-repository";
-import { LoadTestimonialsController } from "../../presentation/controllers/load-testimonials";
+import { DbLoadTestimonials } from "../../data/use-cases";
+import { TestimonialRepository } from "../../infra/db";
+import { LoadTestimonialsController } from "../../presentation/controllers";
 
 export const makeLoadTestimonials = (): LoadTestimonialsController => {
 	const loadTestimonialsRepository = new TestimonialRepository();

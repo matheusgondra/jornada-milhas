@@ -1,9 +1,11 @@
 import { DbAddTestimonial } from "../../data/use-cases";
-import { TestimonialRepository } from "../../infra/db/postgresql/testimonial-repository";
-import { AddTestimonialController } from "../../presentation/controllers/add-testimonial";
-import { NameValidation } from "../../presentation/helpers/validators/name-validation";
-import { RequiredFieldValidation } from "../../presentation/helpers/validators/required-fields-validation";
-import { ValidationComposite } from "../../presentation/helpers/validators/validation-composite";
+import { TestimonialRepository } from "../../infra/db";
+import { AddTestimonialController } from "../../presentation/controllers";
+import {
+	NameValidation,
+	RequiredFieldValidation,
+	ValidationComposite
+} from "../../presentation/helpers";
 
 export const makeAddTestimonial = (): AddTestimonialController => {
 	const validations = [

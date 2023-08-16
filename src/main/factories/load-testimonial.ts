@@ -1,8 +1,7 @@
 import { DbLoadTestimonial } from "../../data/use-cases";
-import { TestimonialRepository } from "../../infra/db/postgresql/testimonial-repository";
+import { TestimonialRepository } from "../../infra/db";
 import { LoadTestimonialController } from "../../presentation/controllers";
-import { ValidationComposite } from "../../presentation/helpers";
-import { IdValidation } from "../../presentation/helpers/validators/id-validation";
+import { ValidationComposite, IdValidation } from "../../presentation/helpers";
 
 export const makeLoadTestimonial = (): LoadTestimonialController => {
 	const loadTestimonialRepository = new TestimonialRepository();
