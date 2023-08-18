@@ -69,4 +69,24 @@ describe("TestimonialRepository", () => {
 			expect(testimonial).toBeNull();
 		});
 	});
+
+	describe("UpdateTestimonial", () => {
+		it("Should return a testimonial updated on success", async () => {
+			const sut = makeSut();
+			await sut.add(makeFakeData());
+			const testimonial = await sut.update({
+				testimonialId: 1,
+				data: {
+					photo: "new_photo",
+					testimonial: "new_testimonial"
+				}
+			});
+			expect(testimonial).toEqual({
+				id: 1,
+				name: "any_name",
+				photo: "new_photo",
+				testimonial: "new_testimonial"
+			});
+		});
+	});
 });
