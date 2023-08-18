@@ -1,7 +1,8 @@
 import {
 	AddTestimonialRepository,
 	LoadTestimonialRepository,
-	LoadTestimonialsRepository
+	LoadTestimonialsRepository,
+	UpdateTestimonialRepository
 } from "../../../data/protocols";
 import { db } from "./prisma";
 
@@ -9,7 +10,8 @@ export class TestimonialRepository
 	implements
 		AddTestimonialRepository,
 		LoadTestimonialsRepository,
-		LoadTestimonialRepository
+		LoadTestimonialRepository,
+		UpdateTestimonialRepository
 {
 	async add(
 		data: AddTestimonialRepository.Params
@@ -39,5 +41,18 @@ export class TestimonialRepository
 			return testimonial;
 		}
 		return null;
+	}
+
+	async update(
+		data: UpdateTestimonialRepository.Params
+	): Promise<UpdateTestimonialRepository.Result> {
+		const testimonial = await db.testimonial.update({
+			where: {
+				id: data.testimonialId
+			},
+			data: data.data
+		});
+
+		return testimonial;
 	}
 }
