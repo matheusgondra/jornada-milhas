@@ -3,10 +3,11 @@ import { Validation } from "./validation";
 
 export class IdValidation implements Validation {
 	validate(input: any): Error | null {
-		if (!input) {
+		const id = Number(input.params.testimonialId);
+		if (!id) {
 			return new MissingParamError("testimonialId");
 		}
-		if (typeof input !== "number") {
+		if (typeof id !== "number") {
 			return new InvalidParamError("testimonialId");
 		}
 		return null;
