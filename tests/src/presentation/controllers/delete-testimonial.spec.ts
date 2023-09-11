@@ -1,5 +1,5 @@
 import { DeleteTestimonialController } from "../../../../src/presentation/controllers";
-import { Validation } from "../../../../src/presentation/helpers";
+import { Validation, badRequest } from "../../../../src/presentation/helpers";
 
 const makeValidationStub = (): Validation => {
 	class ValidationStub implements Validation {
@@ -38,5 +38,18 @@ describe("DeleteTestimonialController", () => {
 		};
 		await sut.handle(httpRequest);
 		expect(validateSpy).toHaveBeenCalledWith(httpRequest);
+	});
+
+	it("Should return 400 if Validation return error", async () => {
+		const { sut, validationStub } = makeSut();
+		jest.spyOn(validationStub, "validate").mockReturnValueOnce(new Error());
+		const httpRequest = {
+			params: {
+				testimonialId: 1
+			},
+			body: {}
+		};
+		const httpResponse = await sut.handle(httpRequest);
+		expect(httpResponse).toEqual(badRequest(new Error()));
 	});
 });
