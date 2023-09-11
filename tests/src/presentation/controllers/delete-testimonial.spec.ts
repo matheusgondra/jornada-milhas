@@ -1,6 +1,10 @@
 import { DeleteTestimonial } from "../../../../src/domain";
 import { DeleteTestimonialController } from "../../../../src/presentation/controllers";
-import { Validation, badRequest } from "../../../../src/presentation/helpers";
+import {
+	Validation,
+	badRequest,
+	serverError
+} from "../../../../src/presentation/helpers";
 import { HttpRequest } from "../../../../src/presentation/protocols";
 
 const makeValidationStub = (): Validation => {
@@ -69,5 +73,14 @@ describe("DeleteTestimonialController", () => {
 		const deleteSpy = jest.spyOn(deleteTestimonialStub, "delete");
 		await sut.handle(makeFakeRequest());
 		expect(deleteSpy).toHaveBeenCalledWith(1);
+	});
+
+	it("Should return 500 if DeleteTestimonial throws", async () => {
+		const { sut, deleteTestimonialStub } = makeSut();
+		jest
+			.spyOn(deleteTestimonialStub, "delete")
+			.mockRejectedValueOnce(new Error());
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(serverError(new Error()));
 	});
 });
