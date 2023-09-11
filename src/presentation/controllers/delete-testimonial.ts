@@ -1,5 +1,5 @@
 import { DeleteTestimonial } from "../../domain";
-import { Validation, badRequest } from "../helpers";
+import { Validation, badRequest, serverError } from "../helpers";
 import { Controller, HttpRequest, HttpResponse } from "../protocols";
 
 export class DeleteTestimonialController implements Controller {
@@ -15,18 +15,22 @@ export class DeleteTestimonialController implements Controller {
 	}
 
 	async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-		const error = this.validation.validate(httpRequest);
-		if (error) {
-			return badRequest(error);
+		try {
+			const error = this.validation.validate(httpRequest);
+			if (error) {
+				return badRequest(error);
+			}
+
+			const testimonialId = Number(httpRequest.params.testimonialId);
+			await this.deleteTestimonial.delete(testimonialId);
+
+			return {
+				statusCode: 200,
+				body: {}
+			};
+		} catch (error) {
+			return serverError(error as Error);
 		}
-
-		const testimonialId = Number(httpRequest.params.testimonialId);
-		await this.deleteTestimonial.delete(testimonialId);
-
-		return {
-			statusCode: 200,
-			body: {}
-		};
 	}
 }
 
