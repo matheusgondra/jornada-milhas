@@ -1,5 +1,6 @@
 import { DeleteTestimonialController } from "../../../../src/presentation/controllers";
 import { Validation, badRequest } from "../../../../src/presentation/helpers";
+import { HttpRequest } from "../../../../src/presentation/protocols";
 
 const makeValidationStub = (): Validation => {
 	class ValidationStub implements Validation {
@@ -26,30 +27,24 @@ const makeSut = (): SutTypes => {
 	};
 };
 
+const makeFakeRequest = (): HttpRequest => ({
+	params: {
+		testimonialId: 1
+	}
+});
+
 describe("DeleteTestimonialController", () => {
 	it("Should call Validation with correct values", async () => {
 		const { sut, validationStub } = makeSut();
 		const validateSpy = jest.spyOn(validationStub, "validate");
-		const httpRequest = {
-			params: {
-				testimonialId: 1
-			},
-			body: {}
-		};
-		await sut.handle(httpRequest);
-		expect(validateSpy).toHaveBeenCalledWith(httpRequest);
+		await sut.handle(makeFakeRequest());
+		expect(validateSpy).toHaveBeenCalledWith(makeFakeRequest());
 	});
 
 	it("Should return 400 if Validation return error", async () => {
 		const { sut, validationStub } = makeSut();
 		jest.spyOn(validationStub, "validate").mockReturnValueOnce(new Error());
-		const httpRequest = {
-			params: {
-				testimonialId: 1
-			},
-			body: {}
-		};
-		const httpResponse = await sut.handle(httpRequest);
+		const httpResponse = await sut.handle(makeFakeRequest());
 		expect(httpResponse).toEqual(badRequest(new Error()));
 	});
 });
