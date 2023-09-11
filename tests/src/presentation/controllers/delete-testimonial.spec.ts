@@ -1,3 +1,4 @@
+import { DeleteTestimonial } from "../../../../src/domain";
 import { DeleteTestimonialController } from "../../../../src/presentation/controllers";
 import { Validation, badRequest } from "../../../../src/presentation/helpers";
 import { HttpRequest } from "../../../../src/presentation/protocols";
@@ -11,19 +12,34 @@ const makeValidationStub = (): Validation => {
 	return new ValidationStub();
 };
 
+const makeDeleteTestimonialStub = (): DeleteTestimonial => {
+	class DeleteTestimonialStub implements DeleteTestimonial {
+		async delete(
+			id: DeleteTestimonial.Params
+		): Promise<DeleteTestimonial.Result> {
+			return true;
+		}
+	}
+	return new DeleteTestimonialStub();
+};
+
 interface SutTypes {
 	sut: DeleteTestimonialController;
 	validationStub: Validation;
+	deleteTestimonialStub: DeleteTestimonial;
 }
 
 const makeSut = (): SutTypes => {
 	const validationStub = makeValidationStub();
+	const deleteTestimonialStub = makeDeleteTestimonialStub();
 	const sut = new DeleteTestimonialController({
-		validation: validationStub
+		validation: validationStub,
+		deleteTestimonial: deleteTestimonialStub
 	});
 	return {
 		sut,
-		validationStub
+		validationStub,
+		deleteTestimonialStub
 	};
 };
 
@@ -46,5 +62,12 @@ describe("DeleteTestimonialController", () => {
 		jest.spyOn(validationStub, "validate").mockReturnValueOnce(new Error());
 		const httpResponse = await sut.handle(makeFakeRequest());
 		expect(httpResponse).toEqual(badRequest(new Error()));
+	});
+
+	it("Should call DeleteTestimonial with correct values", async () => {
+		const { sut, deleteTestimonialStub } = makeSut();
+		const deleteSpy = jest.spyOn(deleteTestimonialStub, "delete");
+		await sut.handle(makeFakeRequest());
+		expect(deleteSpy).toHaveBeenCalledWith(1);
 	});
 });
