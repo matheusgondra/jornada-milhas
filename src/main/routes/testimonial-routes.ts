@@ -2,6 +2,7 @@ import { Router } from "express";
 import { adaptRoute } from "../adapters";
 import {
 	makeAddTestimonial,
+	makeDeleteTestimonial,
 	makeLoadTestimonial,
 	makeLoadTestimonials,
 	makeUpdateTestimonial
@@ -14,5 +15,9 @@ export default (router: Router): void => {
 	router.patch(
 		"/depoimentos/:testimonialId",
 		adaptRoute(makeUpdateTestimonial())
+	);
+	router.delete(
+		"/depoimentos/:testimonialId",
+		adaptRoute(makeDeleteTestimonial())
 	);
 };
