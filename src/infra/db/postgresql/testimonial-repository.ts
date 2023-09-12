@@ -61,14 +61,16 @@ export class TestimonialRepository
 	async delete(
 		testimonialId: DeleteTestimonialRepository.Params
 	): Promise<DeleteTestimonialRepository.Result> {
-		const success: boolean = true;
+		try {
+			const testimonial = await db.testimonial.delete({
+				where: {
+					id: testimonialId
+				}
+			});
 
-		await db.testimonial.delete({
-			where: {
-				id: testimonialId
-			}
-		});
-
-		return success;
+			return true;
+		} catch (error) {
+			return false;
+		}
 	}
 }
