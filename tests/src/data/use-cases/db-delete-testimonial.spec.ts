@@ -37,4 +37,13 @@ describe("DbDeleteTestimonial", () => {
 		await sut.delete(1);
 		expect(deleteSpy).toHaveBeenCalledWith(1);
 	});
+
+	it("Should throw if DeleteTestimonialRepository throws", async () => {
+		const { sut, deleteTestimonialRepositoryStub } = makeSut();
+		jest
+			.spyOn(deleteTestimonialRepositoryStub, "delete")
+			.mockRejectedValueOnce(new Error());
+		const promise = sut.delete(1);
+		await expect(promise).rejects.toThrow();
+	});
 });
