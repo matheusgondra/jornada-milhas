@@ -3,6 +3,7 @@ import { LoadTestimonialController } from "../../../../src/presentation/controll
 import { NotFoundError } from "../../../../src/presentation/errors";
 import {
 	badRequest,
+	notFound,
 	serverError,
 	success,
 	Validation
@@ -60,16 +61,12 @@ const makeFakeRequest = (): HttpRequest => ({
 	}
 });
 
-const {
-	params: { testimonialId }
-} = makeFakeRequest();
-
 describe("LoadTestimonial Controller", () => {
 	it("Should call Validation with correct values", async () => {
 		const { sut, validationStub } = makeSut();
 		const validateSpy = jest.spyOn(validationStub, "validate");
 		await sut.handle(makeFakeRequest());
-		expect(validateSpy).toBeCalledWith(testimonialId);
+		expect(validateSpy).toBeCalledWith(makeFakeRequest());
 	});
 
 	it("Should 400 if Validation returns an error", async () => {
@@ -83,7 +80,7 @@ describe("LoadTestimonial Controller", () => {
 		const { sut, loadTestimonialStub } = makeSut();
 		const loadSpy = jest.spyOn(loadTestimonialStub, "load");
 		await sut.handle(makeFakeRequest());
-		expect(loadSpy).toBeCalledWith(testimonialId);
+		expect(loadSpy).toBeCalledWith(1);
 	});
 
 	it("Should returns 500 if LoadTestimonial throws", async () => {
@@ -95,13 +92,11 @@ describe("LoadTestimonial Controller", () => {
 		expect(httpResponse).toEqual(serverError(new Error()));
 	});
 
-	it("Should return not found if LoadTestimonial returns null", async () => {
+	it("Should return 404 if LoadTestimonial returns null", async () => {
 		const { sut, loadTestimonialStub } = makeSut();
 		jest.spyOn(loadTestimonialStub, "load").mockResolvedValueOnce(null);
 		const httpResponse = await sut.handle(makeFakeRequest());
-		expect(httpResponse).toEqual(
-			badRequest(new NotFoundError("testimonial"))
-		);
+		expect(httpResponse).toEqual(notFound(new NotFoundError("testimonial")));
 	});
 
 	it("Should return a testimonial on success", async () => {
