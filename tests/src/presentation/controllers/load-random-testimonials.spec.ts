@@ -1,5 +1,6 @@
 import { LoadRandomTestimonials } from "../../../../src/domain";
 import { LoadRandomTestimonialsController } from "../../../../src/presentation/controllers";
+import { serverError } from "../../../../src/presentation/helpers";
 
 const makeLoadRandomTestimonials = (): LoadRandomTestimonials => {
 	class LoadRandomTestimonialsStub implements LoadRandomTestimonials {
@@ -51,5 +52,14 @@ describe("LoadRandomTestimonialsController", () => {
 		const loadSpy = jest.spyOn(loadRandomTestimonialsStub, "load");
 		await sut.handle({});
 		expect(loadSpy).toBeCalledTimes(1);
+	});
+
+	it("Should return 500 if LoadRandomTestimonials throws", async () => {
+		const { sut, loadRandomTestimonialsStub } = makeSut();
+		jest
+			.spyOn(loadRandomTestimonialsStub, "load")
+			.mockRejectedValueOnce(new Error());
+		const httpResponse = await sut.handle({});
+		expect(httpResponse).toEqual(serverError(new Error()));
 	});
 });
