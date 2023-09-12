@@ -97,5 +97,12 @@ describe("TestimonialRepository", () => {
 			const deleted = await sut.delete(1);
 			expect(deleted).toBe(true);
 		});
+
+		it("Should return false if testimonial not exists", async () => {
+			const sut = makeSut();
+			await sut.add(makeFakeData());
+			const deleted = await sut.delete(2);
+			expect(deleted).toBe(false);
+		});
 	});
 });
