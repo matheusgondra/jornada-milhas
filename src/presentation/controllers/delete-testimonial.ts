@@ -1,5 +1,12 @@
 import { DeleteTestimonial } from "../../domain";
-import { Validation, badRequest, noContent, serverError } from "../helpers";
+import { NotFoundError } from "../errors";
+import {
+	Validation,
+	badRequest,
+	noContent,
+	notFound,
+	serverError
+} from "../helpers";
 import { Controller, HttpRequest, HttpResponse } from "../protocols";
 
 export class DeleteTestimonialController implements Controller {
@@ -22,7 +29,10 @@ export class DeleteTestimonialController implements Controller {
 			}
 
 			const testimonialId = Number(httpRequest.params.testimonialId);
-			await this.deleteTestimonial.delete(testimonialId);
+			const isSuccess = await this.deleteTestimonial.delete(testimonialId);
+			if (!isSuccess) {
+				return notFound(new NotFoundError("Testimonial"));
+			}
 
 			return noContent();
 		} catch (error) {
