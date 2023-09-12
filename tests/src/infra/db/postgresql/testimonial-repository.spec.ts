@@ -89,4 +89,13 @@ describe("TestimonialRepository", () => {
 			});
 		});
 	});
+
+	describe("DeleteTestimonial", () => {
+		it("Should return true on success", async () => {
+			const sut = makeSut();
+			await sut.add(makeFakeData());
+			const deleted = await sut.delete(1);
+			expect(deleted).toBe(true);
+		});
+	});
 });
