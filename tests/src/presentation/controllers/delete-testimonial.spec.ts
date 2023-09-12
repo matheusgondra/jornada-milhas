@@ -1,9 +1,11 @@
 import { DeleteTestimonial } from "../../../../src/domain";
 import { DeleteTestimonialController } from "../../../../src/presentation/controllers";
+import { NotFoundError } from "../../../../src/presentation/errors";
 import {
 	Validation,
 	badRequest,
 	noContent,
+	notFound,
 	serverError
 } from "../../../../src/presentation/helpers";
 import { HttpRequest } from "../../../../src/presentation/protocols";
@@ -83,6 +85,13 @@ describe("DeleteTestimonialController", () => {
 			.mockRejectedValueOnce(new Error());
 		const httpResponse = await sut.handle(makeFakeRequest());
 		expect(httpResponse).toEqual(serverError(new Error()));
+	});
+
+	it("Should return 404 if DeleteTestimonial return false", async () => {
+		const { sut, deleteTestimonialStub } = makeSut();
+		jest.spyOn(deleteTestimonialStub, "delete").mockResolvedValueOnce(false);
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(notFound(new NotFoundError("Testimonial")));
 	});
 
 	it("Should return 204 on success", async () => {
