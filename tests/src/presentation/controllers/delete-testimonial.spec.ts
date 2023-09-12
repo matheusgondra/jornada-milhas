@@ -3,6 +3,7 @@ import { DeleteTestimonialController } from "../../../../src/presentation/contro
 import {
 	Validation,
 	badRequest,
+	noContent,
 	serverError
 } from "../../../../src/presentation/helpers";
 import { HttpRequest } from "../../../../src/presentation/protocols";
@@ -82,5 +83,11 @@ describe("DeleteTestimonialController", () => {
 			.mockRejectedValueOnce(new Error());
 		const httpResponse = await sut.handle(makeFakeRequest());
 		expect(httpResponse).toEqual(serverError(new Error()));
+	});
+
+	it("Should return 204 on success", async () => {
+		const { sut } = makeSut();
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(noContent());
 	});
 });
