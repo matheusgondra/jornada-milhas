@@ -1,4 +1,5 @@
 import { LoadRandomTestimonials } from "../../domain";
+import { serverError } from "../helpers";
 import { Controller, HttpRequest, HttpResponse } from "../protocols";
 
 export class LoadRandomTestimonialsController implements Controller {
@@ -11,12 +12,16 @@ export class LoadRandomTestimonialsController implements Controller {
 	}
 
 	async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-		await this.loadRandomTestimonials.load();
+		try {
+			await this.loadRandomTestimonials.load();
 
-		return {
-			statusCode: 200,
-			body: []
-		};
+			return {
+				statusCode: 200,
+				body: []
+			};
+		} catch (error) {
+			return serverError(error as Error);
+		}
 	}
 }
 
