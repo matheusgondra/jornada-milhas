@@ -70,4 +70,13 @@ describe("Testimonial Routes", () => {
 			});
 		});
 	});
+
+	describe("DELETE /depoimentos/:testimonialId", () => {
+		it("Should returns 204 on success", async () => {
+			await request(app).post("/depoimentos").send(makeFakeRequest());
+
+			const response = await request(app).delete("/depoimentos/1");
+			expect(response.statusCode).toBe(204);
+		});
+	});
 });
