@@ -1,6 +1,6 @@
 import { LoadRandomTestimonials } from "../../../../src/domain";
 import { LoadRandomTestimonialsController } from "../../../../src/presentation/controllers";
-import { serverError } from "../../../../src/presentation/helpers";
+import { serverError, success } from "../../../../src/presentation/helpers";
 
 const makeLoadRandomTestimonials = (): LoadRandomTestimonials => {
 	class LoadRandomTestimonialsStub implements LoadRandomTestimonials {
@@ -13,13 +13,13 @@ const makeLoadRandomTestimonials = (): LoadRandomTestimonials => {
 					testimonial: "any_testimonial"
 				},
 				{
-					id: 1,
+					id: 2,
 					name: "any_name",
 					photo: "any_photo",
 					testimonial: "any_testimonial"
 				},
 				{
-					id: 1,
+					id: 3,
 					name: "any_name",
 					photo: "any_photo",
 					testimonial: "any_testimonial"
@@ -61,5 +61,32 @@ describe("LoadRandomTestimonialsController", () => {
 			.mockRejectedValueOnce(new Error());
 		const httpResponse = await sut.handle({});
 		expect(httpResponse).toEqual(serverError(new Error()));
+	});
+
+	it("Should return the testimonials on success", async () => {
+		const { sut } = makeSut();
+		const httpResponse = await sut.handle({});
+		expect(httpResponse).toEqual(
+			success([
+				{
+					id: 1,
+					name: "any_name",
+					photo: "any_photo",
+					testimonial: "any_testimonial"
+				},
+				{
+					id: 2,
+					name: "any_name",
+					photo: "any_photo",
+					testimonial: "any_testimonial"
+				},
+				{
+					id: 3,
+					name: "any_name",
+					photo: "any_photo",
+					testimonial: "any_testimonial"
+				}
+			])
+		);
 	});
 });
