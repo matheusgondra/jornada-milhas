@@ -1,5 +1,6 @@
 import {
 	AddTestimonialRepository,
+	DeleteTestimonialRepository,
 	LoadTestimonialRepository,
 	LoadTestimonialsRepository,
 	UpdateTestimonialRepository
@@ -11,7 +12,8 @@ export class TestimonialRepository
 		AddTestimonialRepository,
 		LoadTestimonialsRepository,
 		LoadTestimonialRepository,
-		UpdateTestimonialRepository
+		UpdateTestimonialRepository,
+		DeleteTestimonialRepository
 {
 	async add(
 		data: AddTestimonialRepository.Params
@@ -54,5 +56,19 @@ export class TestimonialRepository
 		});
 
 		return testimonial;
+	}
+
+	async delete(
+		testimonialId: DeleteTestimonialRepository.Params
+	): Promise<DeleteTestimonialRepository.Result> {
+		const success: boolean = true;
+
+		await db.testimonial.delete({
+			where: {
+				id: testimonialId
+			}
+		});
+
+		return success;
 	}
 }
