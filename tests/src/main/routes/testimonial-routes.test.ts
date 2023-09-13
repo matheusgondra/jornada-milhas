@@ -54,6 +54,33 @@ describe("Testimonial Routes", () => {
 		});
 	});
 
+	describe("GET /depoimentos-home", () => {
+		it("Should return 3 random testimonials on success", async () => {
+			await request(app).post("/depoimentos").send(makeFakeRequest());
+			await request(app).post("/depoimentos").send(makeFakeRequest());
+			await request(app).post("/depoimentos").send(makeFakeRequest());
+			await request(app).post("/depoimentos").send(makeFakeRequest());
+
+			const response = await request(app).get("/depoimentos-home");
+			expect(response.statusCode).toBe(200);
+			expect(response.body.length).toBe(3);
+			expect(response.body).toEqual([
+				{
+					id: expect.any(Number),
+					...makeFakeRequest()
+				},
+				{
+					id: expect.any(Number),
+					...makeFakeRequest()
+				},
+				{
+					id: expect.any(Number),
+					...makeFakeRequest()
+				}
+			]);
+		});
+	});
+
 	describe("PATCH /depoimentos/:testimonialId", () => {
 		it("Should returns 200 on success", async () => {
 			await request(app).post("/depoimentos").send(makeFakeRequest());
