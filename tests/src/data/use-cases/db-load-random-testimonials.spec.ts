@@ -22,6 +22,18 @@ const makeLoadTestimonialsRepository = (): LoadTestimonialsRepository => {
 					name: "any_name",
 					photo: "any_photo",
 					testimonial: "any_testimonial"
+				},
+				{
+					id: 4,
+					name: "any_name",
+					photo: "any_photo",
+					testimonial: "any_testimonial"
+				},
+				{
+					id: 5,
+					name: "any_name",
+					photo: "any_photo",
+					testimonial: "any_testimonial"
 				}
 			];
 		}
@@ -60,5 +72,11 @@ describe("DbLoadRandomTestimonials", () => {
 			.mockRejectedValueOnce(new Error());
 		const promise = sut.load();
 		await expect(promise).rejects.toThrow();
+	});
+
+	it("Should return 3 random testimonials on success", async () => {
+		const { sut } = makeSut();
+		const testimonials = await sut.load();
+		expect(testimonials.length).toBe(3);
 	});
 });
