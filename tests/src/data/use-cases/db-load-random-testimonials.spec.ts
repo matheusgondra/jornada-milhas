@@ -79,4 +79,24 @@ describe("DbLoadRandomTestimonials", () => {
 		const testimonials = await sut.load();
 		expect(testimonials.length).toBe(3);
 	});
+
+	it("Should return 3 or less testimonials if there are less than 3 testimonials", async () => {
+		const { sut, loadTestimonialsRepositoryStub } = makeSut();
+		jest.spyOn(loadTestimonialsRepositoryStub, "load").mockResolvedValueOnce([
+			{
+				id: 1,
+				name: "any_name",
+				photo: "any_photo",
+				testimonial: "any_testimonial"
+			},
+			{
+				id: 2,
+				name: "any_name",
+				photo: "any_photo",
+				testimonial: "any_testimonial"
+			}
+		]);
+		const testimonials = await sut.load();
+		expect(testimonials.length).toBe(2);
+	});
 });
