@@ -1,22 +1,22 @@
 import { LoadRandomTestimonials } from "../../domain";
-import { LoadRandomTestimonialsRepository } from "../protocols";
+import { LoadTestimonialsRepository } from "../protocols";
 
 export class DbLoadRandomTestimonials implements LoadRandomTestimonials {
-	private readonly loadRandomTestimonialsRepository: LoadRandomTestimonialsRepository;
+	private readonly loadTestimonialsRepository: LoadTestimonialsRepository;
 
 	constructor({
-		loadRandomTestimonialsRepository
+		loadTestimonialsRepository
 	}: DbLoadRandomTestimonials.Dependencies) {
-		this.loadRandomTestimonialsRepository = loadRandomTestimonialsRepository;
+		this.loadTestimonialsRepository = loadTestimonialsRepository;
 	}
 
 	async load(): Promise<LoadRandomTestimonials.Result> {
-		return await this.loadRandomTestimonialsRepository.load();
+		return await this.loadTestimonialsRepository.load();
 	}
 }
 
 export namespace DbLoadRandomTestimonials {
 	export interface Dependencies {
-		loadRandomTestimonialsRepository: LoadRandomTestimonialsRepository;
+		loadTestimonialsRepository: LoadTestimonialsRepository;
 	}
 }
