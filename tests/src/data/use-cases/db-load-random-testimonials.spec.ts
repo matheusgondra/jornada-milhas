@@ -1,8 +1,8 @@
 import { LoadRandomTestimonialsRepository } from "../../../../src/data/protocols";
 import { DbLoadRandomTestimonials } from "../../../../src/data/use-cases";
 
-describe("DbLoadRandomTestimonials", () => {
-	it("Should call LoadRandomTestimonialsRepository", async () => {
+const makeLoadRandomTestimonialsRepository =
+	(): LoadRandomTestimonialsRepository => {
 		class LoadRandomTestimonialsRepositoryStub
 			implements LoadRandomTestimonialsRepository
 		{
@@ -29,11 +29,29 @@ describe("DbLoadRandomTestimonials", () => {
 				];
 			}
 		}
-		const loadRandomTestimonialsRepositoryStub =
-			new LoadRandomTestimonialsRepositoryStub();
-		const sut = new DbLoadRandomTestimonials({
-			loadRandomTestimonialsRepository: loadRandomTestimonialsRepositoryStub
-		});
+		return new LoadRandomTestimonialsRepositoryStub();
+	};
+
+interface SutTypes {
+	sut: DbLoadRandomTestimonials;
+	loadRandomTestimonialsRepositoryStub: LoadRandomTestimonialsRepository;
+}
+
+const makeSut = (): SutTypes => {
+	const loadRandomTestimonialsRepositoryStub =
+		makeLoadRandomTestimonialsRepository();
+	const sut = new DbLoadRandomTestimonials({
+		loadRandomTestimonialsRepository: loadRandomTestimonialsRepositoryStub
+	});
+	return {
+		sut,
+		loadRandomTestimonialsRepositoryStub
+	};
+};
+
+describe("DbLoadRandomTestimonials", () => {
+	it("Should call LoadRandomTestimonialsRepository", async () => {
+		const { sut, loadRandomTestimonialsRepositoryStub } = makeSut();
 		const loadSpy = jest.spyOn(loadRandomTestimonialsRepositoryStub, "load");
 		await sut.load();
 		expect(loadSpy).toBeCalledTimes(1);
