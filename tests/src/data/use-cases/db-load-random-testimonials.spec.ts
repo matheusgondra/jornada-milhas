@@ -52,4 +52,13 @@ describe("DbLoadRandomTestimonials", () => {
 		await sut.load();
 		expect(loadSpy).toBeCalledTimes(1);
 	});
+
+	it("Should throw if LoadTestimonials throws", async () => {
+		const { sut, loadTestimonialsRepositoryStub } = makeSut();
+		jest
+			.spyOn(loadTestimonialsRepositoryStub, "load")
+			.mockRejectedValueOnce(new Error());
+		const promise = sut.load();
+		await expect(promise).rejects.toThrow();
+	});
 });
